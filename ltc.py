@@ -29,19 +29,20 @@ parser.add_argument(
 def main():
     args = parser.parse_args()
 
-    tour_ms = set(args.tour.readlines())
+    tour_ms = set([s.rstrip() for s in args.tour.readlines()])
 
     riders_ms = {}
     targets_ms = {}
     for rider in args.riders:
         with open(rider, 'r') as r:
-            riders_ms[rider] = set(r.readlines())
-        targets_ms[rider] = tour_ms.intersection(riders_ms[rider])
+            riders_ms[rider] = set([s.rstrip() for s in r.readlines()])
+        targets_ms[rider] = sorted(tour_ms.intersection(riders_ms[rider]))
 
     print("New tour municipalities for riders")
 
     for rider in args.riders:
-        print(f"{rider}: {targets_ms[rider]}")
+        count = len(targets_ms[rider])
+        print(f"{rider}: ({count}) {targets_ms[rider]}")
 
 
 if __name__ == '__main__':
